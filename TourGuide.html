@@ -1,14 +1,33 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>TourGuide</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="css/TG_style.css">
 </head>
-<body>
+<body onselectstart="return false">
+    <div class="sidebar">
+        <div>
+            <button type="button" class="detail-close btn btn-default btn-xs pull-right"><span class="glyphicon glyphicon-remove"></span></button>
+        </div>
+        <hr/>
+        <h3 class="detail-title"><b>中山大学图书馆</b></h3>
+        <img class="detail-img" src="img/lib.jpg"/>
+        <div class="inline"><span class="glyphicon glyphicon-map-marker"></span> 地址：</div>
+        <p class="detail-add">内环东路233号</p>
+        <div class="inline"><span class="glyphicon glyphicon-tags"></span> 描述：</div>
+        <p class="detail-dis">一个用来读书的地方</p>
+        <button type="button" class="detail-btn btn btn-default pull-left">设为起点</button>
+        <button type="button" class="detail-btn btn btn-default pull-right">设为终点</button>
+    </div>
     <div id="container"></div>
     <script>document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')</script>
     <script type="text/javascript" src="js/jsPlumb-2.0.5-min.js"></script>
     <script type="text/javascript" src="js/TG_logic.js"></script>
     <script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
 </body>
 </html>

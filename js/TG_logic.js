@@ -32,19 +32,43 @@ jsPlumb.ready(function(){
         Container : "container",
     });
 
-    var CreatePoint = function(){
-        var newState = $('<div>').attr('id', 'p0').addClass('item').text("Zero");
+    // basic UI
+    var stateId = 0;
+    var CreatePoint = function(X, Y){
+        var newState = $('<div>').attr('id', 'p'+stateId).addClass('item').text(stateId);
         newState.css({
-            top : "20px",
-            left : "40px"
+            top : Y+"%",
+            left : X+"%"
+        })
+        newState.click(function(event) {
+            $(".detail-box").fadeOut("fast");
+            showDetailBox(X, Y, newState.attr("id"));
+            event.stopPropagation();
         })
         $("#container").append(newState);
-        instance.draggable(newState, {
-            containment: 'parent'
-        });
+        stateId++;
     };
 
-    CreatePoint();
+    var showDetailBox = function(X, Y, iden) {
+        $(".sidebar").animate({
+            "left": "0px"
+        })
+    }
 
+
+    // click events
+    $("#container").click(function() {
+        $(".detail-box").fadeOut("fast");
+    });
+
+    $(".detail-close").click(function() {
+        $(".sidebar").animate({
+            "left": "-300px"
+        })
+    });
+
+
+    CreatePoint(40, 20);
+    CreatePoint(60, 30);
     console.log("Done.");
 });
