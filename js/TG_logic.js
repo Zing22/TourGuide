@@ -33,12 +33,12 @@ jsPlumb.ready(function(){
     });
 
     // basic UI
-    var stateId = 0;
+    var stateId = 1;
     var CreatePoint = function(X, Y){
-        var newState = $('<div>').attr('id', 'p'+stateId).addClass('item').text(stateId);
+        var newState = $('<div>').attr('id', stateId).addClass('item').text(stateId);
         newState.css({
-            top : Y+"%",
-            left : X+"%"
+            top : Y+"px",
+            left : X+"px"
         })
         newState.click(function(event) {
             $(".detail-box").fadeOut("fast");
@@ -53,6 +53,11 @@ jsPlumb.ready(function(){
         $(".sidebar").animate({
             "left": "0px"
         })
+        $(".detail-title").text(details[iden]["title"]);
+        $(".detail-addr").text(details[iden]["addr"]);
+        $(".detail-tel").text(details[iden]["tel"]);
+        $(".detail-dis").text(details[iden]["dis"]);
+        $(".detail-img").attr("src", details[iden]["img"])
     }
 
 
@@ -67,8 +72,35 @@ jsPlumb.ready(function(){
         })
     });
 
+    var autoFix = function(){
+        var scale = $(window).width()/1920;
+        $('#container').css({
+          '-webkit-transform' : 'scale(' + scale + ')',
+          '-moz-transform'    : 'scale(' + scale + ')',
+          '-ms-transform'     : 'scale(' + scale + ')',
+          '-o-transform'      : 'scale(' + scale + ')',
+          'transform'         : 'scale(' + scale + ')'
+        });
+    };
 
-    CreatePoint(40, 20);
-    CreatePoint(60, 30);
+    // autoFix();
+
+
+    var init = function(){
+        CreatePoint(992, 208);
+        CreatePoint(1003, 296);
+        CreatePoint(859, 358);
+        CreatePoint(1007, 513);
+        CreatePoint(964, 591);
+        CreatePoint(1224, 353);
+        CreatePoint(1295, 639);
+        CreatePoint(1214, 746);
+        CreatePoint(993, 838);
+        CreatePoint(753, 532);
+        CreatePoint(571, 741);
+        CreatePoint(338, 808);
+    };
+
+    init();
     console.log("Done.");
 });
