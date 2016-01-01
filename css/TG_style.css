@@ -6,6 +6,15 @@ html, body {
     height: 100%;
     -moz-user-select: none;
     position: relative;
+    overflow: hidden;
+    background-color: Linen;
+}
+
+#shell {
+    position: relative;
+    overflow: scroll;  /* screen fix needs*/
+    width: 100%;
+    height: 100%;
 }
 
 #container {
@@ -20,28 +29,39 @@ html, body {
     background-repeat: no-repeat;
     top: 0;
     left: 0;
+    z-index: 1;
+    transition:0.567s;
 }
 
 .item {
+/*    border-color: black;
+    border-width: 1px 1px 1px 1px;
+    border-style: solid;*/
     border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    background-color: #333333;
-    color: #333333;
+    width: 30px;
+    height: 30px;
+    background-color: inherit;
+    /*color: #333333;*/
+    color: 333333;
     position: absolute;
     text-align: center;
-    line-height: 20px;
-    overflow: hidden;
+    line-height: 30px;
+    overflow: visible;
     cursor: default;
-    z-index: 1;
-    font-size: 1.2em;
+    z-index: 2;
+    font-size: 1em;
     transition:0.345s;
 }
 
-.item:hover {
+.item:hover, .hover {
     -webkit-transform:scale(1.4);
     /*-moz-transform:scale(1.4);*/
     color: white;
+    background-color: black;
+}
+
+.glyphicon-tower {
+    -webkit-transform:scale(0.9);
 }
 
 .detail-title {
@@ -59,7 +79,7 @@ html, body {
     top: 0;
     bottom: 0;
     left: 0;
-    z-index: 1000;
+    z-index: 100;
     display: block;
     padding: 20px;
     overflow-x: hidden;
@@ -90,10 +110,10 @@ html, body {
 }
 
 .active {
-    box-shadow: 0px 0px 2px 2px #CCFFFF;
-    -o-box-shadow: 0px 0px 2px 2px #CCFFFF;
-    -webkit-box-shadow: 0px 0px 2px 2px #CCFFFF;
-    -moz-box-shadow: 0px 0px 2px 2px #CCFFFF;
+    box-shadow: 0px 0px 2px 2px #6699CC;
+    -o-box-shadow: 0px 0px 2px 2px #6699CC;
+    -webkit-box-shadow: 0px 0px 2px 2px #6699CC;
+    -moz-box-shadow: 0px 0px 2px 2px #6699CC;
     -moz-border-radius: 0.5em;
     -webkit-transition: -webkit-box-shadow 0.15s ease-in;
     -moz-transition: -moz-box-shadow 0.15s ease-in;
@@ -116,10 +136,23 @@ html, body {
 }
 
 .end {
-    box-shadow: 0px 0px 5px 5px #CCCCCC;
-    -o-box-shadow: 0px 0px 5px 5px #CCCCCC;
-    -webkit-box-shadow: 0px 0px 5px 5px #CCCCCC;
-    -moz-box-shadow: 0px 0px 5px 5px #CCCCCC;
+    box-shadow: 0px 0px 5px 5px #6699CC;
+    -o-box-shadow: 0px 0px 5px 5px #6699CC;
+    -webkit-box-shadow: 0px 0px 5px 5px #6699CC;
+    -moz-box-shadow: 0px 0px 5px 5px #6699CC;
+    -moz-border-radius: 0.5em;
+    -webkit-transition: -webkit-box-shadow 0.15s ease-in;
+    -moz-transition: -moz-box-shadow 0.15s ease-in;
+    -o-transition: -o-box-shadow 0.15s ease-in;
+    transition: box-shadow 0.15s ease-in;
+    transition:0.345s;
+}
+
+.path {
+    box-shadow: 0px 0px 4px 4px #6699CC;
+    -o-box-shadow: 0px 0px 4px 4px #6699CC;
+    -webkit-box-shadow: 0px 0px 4px 4px #6699CC;
+    -moz-box-shadow: 0px 0px 4px 4px #6699CC;
     -moz-border-radius: 0.5em;
     -webkit-transition: -webkit-box-shadow 0.15s ease-in;
     -moz-transition: -moz-box-shadow 0.15s ease-in;
@@ -130,11 +163,64 @@ html, body {
 
 .detail-close {
     float: left;
-    z-index: 1001;
     height: 32px;
     width: 32px;
     border-radius: 50%;
     position: absolute;
     right: 10px;
     top: 10px;
+    cursor: normal;
+}
+
+.progress {
+    position: absolute;
+    top: 45%;
+    left: 15%;
+    width: 70%;
+    height: 10%;
+    z-index: 103;
+}
+
+.mask {
+    background-color: lightgrey;
+    width: 100%;
+    height: 100%;
+    z-index: 102;
+    opacity: 0.6;
+    float: left;
+    position: absolute;
+}
+
+#fix-btn {
+    float: right;;
+    position: absolute;
+    right: 2%;
+    top: 2%;
+    width: 8%;
+    height: 6%;
+    z-index: 3;
+}
+
+#port-btn {
+    float: right;;
+    position: absolute;
+    right: 11%;
+    top: 2%;
+    width: 8%;
+    height: 6%;
+    z-index: 3;
+}
+
+#rebuild-btn {
+    float: right;;
+    position: absolute;
+    right: 2%;
+    top: 10%;
+    width: 8%;
+    height: 6%;
+    z-index: 3;
+}
+
+.progress-bar {
+    width: 45%;
 }

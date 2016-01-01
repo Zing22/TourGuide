@@ -19,21 +19,15 @@ jsPlumb.ready(function(){
             gap: 10,
             cornerRadius: 5
         }],
-        ConnectionOverlays: [
-            ["Arrow", {
-                location: 0.5,
-                width: 12,
-                height: 4,
-                foldback: 0.85,
-            }]
-        ],
         Container : "container",
     });
 
     // basic UI
     var stateId = 1;
     var CreatePoint = function(X, Y){
-        var newState = $('<div>').attr('id', 'p'+stateId).addClass('item').text(stateId);
+        var pat = $('<span>').addClass("glyphicon glyphicon-tower");
+        var newState = $('<div>').attr('id', 'p'+stateId).addClass('item');
+        newState.append(pat);
         newState.css({
             top : Y+"px",
             left : X+"px"
@@ -72,9 +66,24 @@ jsPlumb.ready(function(){
         var common = {
             endpoint: "Blank",
             connector: ["Bezier"],
-            anchor: "AutoDefault"
+            anchor: "AutoDefault",
+            overlays:[
+                ["Arrow", {
+                    location: 0.5,
+                    width: 12,
+                    height: 4,
+                    foldback: 0.85,
+                }],
+                // ["Lable", {
+                //     lable: "Foooo",
+                //     location: 0.25,
+                //     id: "sd"
+                // }]
+            ]
         };
         instance.connect({source: el1, target: el2}, common);
+        $("#"+el1).addClass("path");
+        $("#"+el2).addClass("path");
     };
 
     // click events
@@ -103,6 +112,21 @@ jsPlumb.ready(function(){
         checkAndDraw();
     });
 
+    $("#fix-btn").click(function(event) {
+        event.stopPropagation();
+        showProgress();
+    });
+    
+    $("#port-btn").click(function(event) {
+        event.stopPropagation();
+        showItems(0);
+    });
+
+    $("#rebuild-btn").click(function(event) {
+        event.stopPropagation();
+        rebuildAll(100);
+    });
+
     // check if begin and end points both exit
     var checkAndDraw = function() {
         var begin = $(".begin").attr("id"),
@@ -115,17 +139,20 @@ jsPlumb.ready(function(){
 
     // auto fix background
     var autoFix = function(){
-        var scale = $(window).width()/1920;
+        var w = $(window),
+            scale = w.height()/1080;
+        var t = -(1080*(1-scale)/2),
+            l = -(1920*(1-scale)/2)
         $('#container').css({
           '-webkit-transform' : 'scale(' + scale + ')',
           '-moz-transform'    : 'scale(' + scale + ')',
           '-ms-transform'     : 'scale(' + scale + ')',
           '-o-transform'      : 'scale(' + scale + ')',
-          'transform'         : 'scale(' + scale + ')'
+          'transform'         : 'scale(' + scale + ')',
+          top : t+"px",
+          left : l+"px"
         });
     };
-
-    // autoFix();
 
     var drawPath = function(begin, end) {
         var path = getPath(begin, end);
@@ -136,20 +163,111 @@ jsPlumb.ready(function(){
 
 
     var init = function(){
-        CreatePoint(992, 208);
-        CreatePoint(1003, 296);
-        CreatePoint(859, 358);
-        CreatePoint(1007, 513);
-        CreatePoint(964, 591);
-        CreatePoint(1224, 353);
-        CreatePoint(1295, 639);
-        CreatePoint(1214, 746);
-        CreatePoint(993, 838);
-        CreatePoint(753, 532);
-        CreatePoint(571, 741);
-        CreatePoint(338, 808);
+        $(".mask").hide();
+        CreatePoint(990, 205);  //1
+        CreatePoint(1003, 296)  //2
+        CreatePoint(859, 358)   //3
+        CreatePoint(982, 462)   //4
+        CreatePoint(964, 591)   //5
+        CreatePoint(1224, 353)  //6
+        CreatePoint(1294, 637)  //7
+        CreatePoint(1214, 746)  //8
+        CreatePoint(993, 838)   //9
+        CreatePoint(753, 532)   //10
+        CreatePoint(571, 741)   //11
+        CreatePoint(333, 806)   //12
+    };
+    init();
+
+    var realProgress = function rp(i) {
+        setTimeout( function() {
+            $(".progress-bar").attr("aria-valuenow", i);
+            $(".progress-bar").css({"width": i+"%"});
+            if (i===10) {
+                $("#shell").scrollTop(0);
+            } else if (i===30) {
+                $(".detail-close").click();
+            } else if (i===60) {
+                $("#shell").css({
+                    "overflow": "hidden"
+                })
+            } else if (i===90) {
+                autoFix();
+            }
+            if (i<100) {
+                rp(i+1);
+            } else {
+                $(".mask").fadeOut();
+            }
+        }, 30);
+    }
+
+    var showProgress = function() {
+        $(".progress-bar").attr("aria-valuenow", 0);
+        $(".progress-bar").css({"width": "0%"});
+        $(".mask").fadeIn();
+        realProgress(1);
+    }
+
+    var showItems = function sit(i) {
+        if(i>=12) {
+            return;
+        } else {
+            var now = $($(".item")[i]);
+            now.addClass("hover");
+            setTimeout(function(){
+                now.removeClass("hover");
+                sit(i+1);
+            }, 600);
+        }
     };
 
-    init();
+
+    //////// BUG exites!!!!!!! ///////////
+    var rebuildAll = function ra(i) {
+        if(i===100) {
+            $(".mask").fadeIn();
+            $(".progress-bar").css({"width": "100%"});
+            $(".progress-bar").attr("aria-valuenow", 100);
+        }
+        setTimeout( function() {
+            $(".progress-bar").attr("aria-valuenow", i);
+            $(".progress-bar").css({"width": i+"%"});
+            $(".detail-close").click();
+            if (i===90) {
+                instance.detachEveryConnection();
+            } else if (i===60) {
+                $(".begin").removeClass("begin");
+                $(".end").removeClass("end");
+            } else if (i===30) {
+                $(".path").removeClass("path");
+                $("#shell").css({
+                    "overflow": "hidden"
+                })
+            } else if (i===10) {
+                $('#container').css({
+                  '-webkit-transform' : 'scale(1.0)',
+                  '-moz-transform'    : 'scale(1.0)',
+                  '-ms-transform'     : 'scale(1.0)',
+                  '-o-transform'      : 'scale(1.0)',
+                  'transform'         : 'scale(1.0)',
+                  top : "0px",
+                  left : "0px"
+                });
+                $("#shell").css({
+                    "overflow": "scroll"
+                });
+            }
+            if (i>0) {
+                ra(i-1);
+            } else {
+                $(".mask").fadeOut();
+            }
+        }, 30);
+        $
+        
+        
+    };
+
     console.log("Done.");
 });
