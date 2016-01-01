@@ -35,7 +35,7 @@ jsPlumb.ready(function(){
     // basic UI
     var stateId = 1;
     var CreatePoint = function(X, Y){
-        var newState = $('<div>').attr('id', stateId).addClass('item').text(stateId);
+        var newState = $('<div>').attr('id', 'p'+stateId).addClass('item').text(stateId);
         newState.css({
             top : Y+"px",
             left : X+"px"
@@ -46,6 +46,8 @@ jsPlumb.ready(function(){
             event.stopPropagation();
         })
         $("#container").append(newState);
+        instance.makeSource(newState);
+        instance.makeTarget(newState);
         stateId++;
     };
 
@@ -100,6 +102,13 @@ jsPlumb.ready(function(){
         CreatePoint(571, 741);
         CreatePoint(338, 808);
     };
+
+    instance.connect({
+      source:$("#1"), 
+      target:$("#2")
+    });
+
+    console.log($("#1"));
 
     init();
     console.log("Done.");
