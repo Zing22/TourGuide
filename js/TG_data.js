@@ -18,6 +18,8 @@ var MAXCOST = 0xFEFEFE,
 var PointNum = [1,2,3,4,5,6,7,8,9,10,11,12];
 
 var dijkstra = function(begin, end) {
+    begin = Number(begin.substring(1));
+    end = Number(end.substring(1));
     var path = [],
         dist = [],
         visited = [];
@@ -57,21 +59,23 @@ var dijkstra = function(begin, end) {
     // 
 };
 
-var getPath = function(rawPath, begin, end) {
+var getPath = function(begin, end) {
+    var rawPath = dijkstra(begin,end);
+    begin = Number(begin.substring(1));
+    end = Number(end.substring(1));
     var path = [end],
         total = 0,
         now = end;
     while(now != begin) {
         path.push(rawPath[now]);
         total += mat[rawPath[now]][now];
-        console.log(rawPath[now]);
         now = rawPath[now];
     }
     path.reverse();
-    console.log(path);
+    return path;
 }
 
-getPath(dijkstra(1,12),1,12);
+// getPath("p1", "p12");
 
 
 

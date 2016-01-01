@@ -26,19 +26,21 @@ html, body {
     border-radius: 50%;
     width: 20px;
     height: 20px;
-    background-color: black;
-    color: black;
+    background-color: #333333;
+    color: #333333;
     position: absolute;
     text-align: center;
     line-height: 20px;
     overflow: hidden;
-    transition:0.345s;
     cursor: default;
     z-index: 1;
     font-size: 1.2em;
+    transition:0.345s;
 }
 
 .item:hover {
+    -webkit-transform:scale(1.4);
+    /*-moz-transform:scale(1.4);*/
     color: white;
 }
 
@@ -78,11 +80,6 @@ html, body {
     transition: box-shadow 0.15s ease-in;
 }
 
-.detail-close {
-    float: left;
-    z-index: 1001;
-}
-
 .detail-title {
     clear: both;
 }
@@ -90,4 +87,54 @@ html, body {
 .inline {
     float: left;
     display: inline-block;
+}
+
+.active {
+    box-shadow: 0px 0px 2px 2px #CCFFFF;
+    -o-box-shadow: 0px 0px 2px 2px #CCFFFF;
+    -webkit-box-shadow: 0px 0px 2px 2px #CCFFFF;
+    -moz-box-shadow: 0px 0px 2px 2px #CCFFFF;
+    -moz-border-radius: 0.5em;
+    -webkit-transition: -webkit-box-shadow 0.15s ease-in;
+    -moz-transition: -moz-box-shadow 0.15s ease-in;
+    -o-transition: -o-box-shadow 0.15s ease-in;
+    transition: box-shadow 0.15s ease-in;
+    transition:0.345s;
+}
+
+.begin {
+    box-shadow: 0px 0px 5px 5px #6699CC;
+    -o-box-shadow: 0px 0px 5px 5px #6699CC;
+    -webkit-box-shadow: 0px 0px 5px 5px #6699CC;
+    -moz-box-shadow: 0px 0px 5px 5px #6699CC;
+    -moz-border-radius: 0.5em;
+    -webkit-transition: -webkit-box-shadow 0.15s ease-in;
+    -moz-transition: -moz-box-shadow 0.15s ease-in;
+    -o-transition: -o-box-shadow 0.15s ease-in;
+    transition: box-shadow 0.15s ease-in;
+    transition:0.345s;
+}
+
+.end {
+    box-shadow: 0px 0px 5px 5px #CCCCCC;
+    -o-box-shadow: 0px 0px 5px 5px #CCCCCC;
+    -webkit-box-shadow: 0px 0px 5px 5px #CCCCCC;
+    -moz-box-shadow: 0px 0px 5px 5px #CCCCCC;
+    -moz-border-radius: 0.5em;
+    -webkit-transition: -webkit-box-shadow 0.15s ease-in;
+    -moz-transition: -moz-box-shadow 0.15s ease-in;
+    -o-transition: -o-box-shadow 0.15s ease-in;
+    transition: box-shadow 0.15s ease-in;
+    transition:0.345s;
+}
+
+.detail-close {
+    float: left;
+    z-index: 1001;
+    height: 32px;
+    width: 32px;
+    border-radius: 50%;
+    position: absolute;
+    right: 10px;
+    top: 10px;
 }
