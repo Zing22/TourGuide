@@ -264,12 +264,13 @@ html, body {
     border-radius: 1em;
     opacity: 0.8;
     padding: 0.5%;
+    text-align: center;
 }
 
-.path-begin, .path-end {
+.path-begin, .path-end, .path-cost {
     font-weight: bolder;
 }
 
-.path-title {
+.path-inline {
     display: inline-block;
 }

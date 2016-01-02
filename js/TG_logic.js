@@ -183,7 +183,7 @@ jsPlumb.ready(function(){
             len = 0,
             totalLen = 0;
         for (var i = 1; i < path.length; i++) {
-            len = String(getCost(el1, el2));
+            len = String(getCost(path[i-1], path[i]));
             MyConnect(path[i-1], path[i], len);
             totalLen += len;
         };
