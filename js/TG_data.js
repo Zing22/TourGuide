@@ -31,8 +31,8 @@ var MAXCOST = 0xFEFEFE,
     ];
 
 var PointNum = [1,2,3,4,5,6,7,8,9,10,11,12],
-    FootSpeed = 3,
-    DirveSpeed = 20,
+    FootSpeed = 5000,
+    DirveSpeed = 13000,
     transportType = "Foot"; // "Drive"
 
 var getCost = function(el1, el2) {
@@ -45,9 +45,9 @@ var getCost = function(el1, el2) {
 
 var getCostTime = function(len) {
     if (transportType==="Foot") {
-        return len/FootSpeed;
+        return Number(len/FootSpeed).toFixed(1);
     } else {
-        return len/DirveSpeed;
+        return Number(len/DirveSpeed).toFixed(1);
     }
 }
 

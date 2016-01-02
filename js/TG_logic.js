@@ -133,6 +133,7 @@ jsPlumb.ready(function(){
             transportType = "Foot";
             $("#trans-btn").text("我要开车");
         }
+        checkAndDraw();
     });
 
     // check if begin and end points both exit
@@ -146,10 +147,17 @@ jsPlumb.ready(function(){
         }
     };
 
+    var min = function(a, b) {
+        if(a<b) return a;
+        else return b;
+    }
+
     // auto fix background
     var autoFix = function(){
         var w = $(window),
-            scale = w.height()/1080;
+            scale1 = w.height()/1080,
+            scale2 = w.width()/1920,
+            scale = min(scale1,scale2);
         var t = -(1080*(1-scale)/2),
             l = -(1920*(1-scale)/2)
         $('#container').css({
@@ -163,37 +171,50 @@ jsPlumb.ready(function(){
         });
     };
 
-    var lightPath = function ltp(path, begin, end) {
+    var g_light = 0;
+    var lightPath = function ltp(path, begin, end, light) {
         var newBegin = $(".begin").attr("id"),
             newEnd = $(".end").attr("id");
-        if (begin===newBegin && end===newEnd) {
+        console.log(light+", "+g_light);
+        if (light===g_light) {
             var items = [];
             for (var i = 0; i < path.length; i++) {
                 items.push("#p"+path[i]);
             };
             showItems(0, items);
             setTimeout(function(){
-                ltp(path, begin, end);
+                ltp(path, begin, end, light);
             }, path.length*600);
         }
     }
 
     var drawPath = function(begin, end) {
+        $(".detail-close").click();
         var path = getPath(begin, end),
             len = 0,
             totalLen = 0;
         for (var i = 1; i < path.length; i++) {
             len = String(getCost(path[i-1], path[i]));
             MyConnect(path[i-1], path[i], len);
-            totalLen += len;
+            totalLen += Number(len);
         };
-        lightPath(path, begin, end);
+        g_light++;
+        lightPath(path, begin, end, g_light);
         PathDetail(begin, end, path, totalLen);
     };
 
 
     var PathDetail = function(begin, end, path, totalLen) {
-        var t = getCostTime(totalLen);
+        $(".path-detail").fadeOut("fast", callback=function(){
+            var t = getCostTime(totalLen);
+            $(".path-begin").text(details[begin]["title"]);
+            $(".path-end").text(details[end]["title"]);
+            $(".path-len").text(totalLen);
+            $(".path-port").text(path.length);
+            $(".path-time").text(t);
+            $(".path-detail").fadeIn();
+        })
+
     };
 
     var init = function(){
@@ -210,8 +231,8 @@ jsPlumb.ready(function(){
         CreatePoint(753, 532)   //10
         CreatePoint(571, 741)   //11
         CreatePoint(333, 806)   //12
+        $(".path-detail").fadeOut();
     };
-    init();
 
     var realProgress = function rp(i) {
         setTimeout( function() {
@@ -262,6 +283,7 @@ jsPlumb.ready(function(){
         if(i===100) {
             $(".mask").fadeIn();
             $(".detail-close").click();
+            $(".active").removeClass("active");
             $(".progress-bar").css({"width": "100%"});
             $(".progress-bar").attr("aria-valuenow", 100);
         }
@@ -269,7 +291,9 @@ jsPlumb.ready(function(){
             $(".progress-bar").attr("aria-valuenow", i);
             $(".progress-bar").css({"width": i+"%"});
             if (i===90) {
+                g_light++;
                 instance.detachEveryConnection();
+                $(".path-detail").fadeOut();
             } else if (i===60) {
                 $(".begin").removeClass("begin");
                 $(".end").removeClass("end");
@@ -300,5 +324,7 @@ jsPlumb.ready(function(){
         }, 30);
     };
 
+
+    init();
     console.log("Done.");
 });

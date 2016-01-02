@@ -265,6 +265,7 @@ html, body {
     opacity: 0.8;
     padding: 0.5%;
     text-align: center;
+    cursor: default;
 }
 
 .path-begin, .path-end, .path-cost {
@@ -273,4 +274,9 @@ html, body {
 
 .path-inline {
     display: inline-block;
+    margin: 2px;
+}
+
+.path-hr {
+    margin: 5px;
 }
