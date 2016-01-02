@@ -35,7 +35,7 @@ jsPlumb.ready(function(){
         newState.click(function(event) {
             event.stopPropagation();
             $(".detail-box").fadeOut("fast");
-            showDetailBox(X, Y, newState.attr("id"));
+            showSidebar(newState.attr("id"));
             $(".active").removeClass("active");
             $(this).addClass("active");
         })
@@ -45,22 +45,24 @@ jsPlumb.ready(function(){
         stateId++;
     };
 
-    var showDetailBox = function(X, Y, iden) {
+    var showSidebar = function(iden) {
         $(".sidebar").animate({
             "left": "-300px"
-        },"fast");
+        },"fast",function(){
+            $(".detail-title").text(details[iden]["title"]);
+            $(".detail-addr").text(details[iden]["addr"]);
+            $(".detail-tel").text(details[iden]["tel"]);
+            $(".detail-dis").text(details[iden]["dis"]);
+            $(".detail-img").attr("src", details[iden]["img"]);
+        });
         $(".sidebar").animate({
             "left": "0px"
         },"600","easeOutBounce");
-        $(".detail-title").text(details[iden]["title"]);
-        $(".detail-addr").text(details[iden]["addr"]);
-        $(".detail-tel").text(details[iden]["tel"]);
-        $(".detail-dis").text(details[iden]["dis"]);
-        $(".detail-img").attr("src", details[iden]["img"])
+        
     }
 
 
-    var MyConnect = function(el1, el2) {
+    var MyConnect = function(el1, el2, len) {
         el1 = "p"+el1;
         el2 = "p"+el2;
         var common = {
@@ -68,17 +70,13 @@ jsPlumb.ready(function(){
             connector: ["Bezier"],
             anchor: "AutoDefault",
             overlays:[
-                ["Arrow", {
-                    location: 0.5,
-                    width: 12,
-                    height: 4,
-                    foldback: 0.85,
-                }],
-                // ["Lable", {
-                //     lable: "Foooo",
-                //     location: 0.25,
-                //     id: "sd"
-                // }]
+                [ "Arrow", {
+                    location: 1,
+                    id: "arrow",
+                    length: 14,
+                    foldback: 0.8
+                } ],
+                [ "Label", { label: len, id: "label", cssClass: "aLabel" }]
             ]
         };
         instance.connect({source: el1, target: el2}, common);
@@ -119,7 +117,7 @@ jsPlumb.ready(function(){
     
     $("#port-btn").click(function(event) {
         event.stopPropagation();
-        showItems(0);
+        showItems(0, $(".item"));
     });
 
     $("#rebuild-btn").click(function(event) {
@@ -127,12 +125,23 @@ jsPlumb.ready(function(){
         rebuildAll(100);
     });
 
+    $("#trans-btn").click(function(event) {
+        if (transportType==="Foot") {
+            transportType = "Drive";
+            $("#trans-btn").text("我要走路");
+        } else {
+            transportType = "Foot";
+            $("#trans-btn").text("我要开车");
+        }
+    });
+
     // check if begin and end points both exit
     var checkAndDraw = function() {
         var begin = $(".begin").attr("id"),
             end = $(".end").attr("id");
+        $(".path").removeClass("path");
+        instance.detachEveryConnection();
         if (begin && end) {
-            instance.detachEveryConnection();
             drawPath(begin, end);
         }
     };
@@ -154,13 +163,38 @@ jsPlumb.ready(function(){
         });
     };
 
+    var lightPath = function ltp(path, begin, end) {
+        var newBegin = $(".begin").attr("id"),
+            newEnd = $(".end").attr("id");
+        if (begin===newBegin && end===newEnd) {
+            var items = [];
+            for (var i = 0; i < path.length; i++) {
+                items.push("#p"+path[i]);
+            };
+            showItems(0, items);
+            setTimeout(function(){
+                ltp(path, begin, end);
+            }, path.length*600);
+        }
+    }
+
     var drawPath = function(begin, end) {
-        var path = getPath(begin, end);
+        var path = getPath(begin, end),
+            len = 0,
+            totalLen = 0;
         for (var i = 1; i < path.length; i++) {
-            MyConnect(path[i-1], path[i]);
+            len = String(getCost(el1, el2));
+            MyConnect(path[i-1], path[i], len);
+            totalLen += len;
         };
+        lightPath(path, begin, end);
+        PathDetail(begin, end, path, totalLen);
     };
 
+
+    var PathDetail = function(begin, end, path, totalLen) {
+        var t = getCostTime(totalLen);
+    };
 
     var init = function(){
         $(".mask").hide();
@@ -209,15 +243,15 @@ jsPlumb.ready(function(){
         realProgress(1);
     }
 
-    var showItems = function sit(i) {
-        if(i>=12) {
+    var showItems = function sit(i, items) {
+        if(i>=items.length) {
             return;
         } else {
-            var now = $($(".item")[i]);
+            var now = $(items[i]);
             now.addClass("hover");
             setTimeout(function(){
                 now.removeClass("hover");
-                sit(i+1);
+                sit(i+1, items);
             }, 600);
         }
     };
@@ -227,13 +261,13 @@ jsPlumb.ready(function(){
     var rebuildAll = function ra(i) {
         if(i===100) {
             $(".mask").fadeIn();
+            $(".detail-close").click();
             $(".progress-bar").css({"width": "100%"});
             $(".progress-bar").attr("aria-valuenow", 100);
         }
         setTimeout( function() {
             $(".progress-bar").attr("aria-valuenow", i);
             $(".progress-bar").css({"width": i+"%"});
-            $(".detail-close").click();
             if (i===90) {
                 instance.detachEveryConnection();
             } else if (i===60) {
@@ -258,15 +292,12 @@ jsPlumb.ready(function(){
                     "overflow": "scroll"
                 });
             }
-            if (i>0) {
+            if (i) {
                 ra(i-1);
             } else {
                 $(".mask").fadeOut();
             }
         }, 30);
-        $
-        
-        
     };
 
     console.log("Done.");

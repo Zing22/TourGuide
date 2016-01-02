@@ -221,6 +221,55 @@ html, body {
     z-index: 3;
 }
 
+#trans-btn {
+    float: right;;
+    position: absolute;
+    right: 11%;
+    top: 10%;
+    width: 8%;
+    height: 6%;
+    z-index: 3;
+}
+
 .progress-bar {
     width: 45%;
+}
+
+.aLabel {
+    box-shadow: 0px 0px 4px 4px #6699CC;
+    -o-box-shadow: 0px 0px 4px 4px #6699CC;
+    -webkit-box-shadow: 0px 0px 4px 4px #6699CC;
+    -moz-box-shadow: 0px 0px 4px 4px #6699CC;
+    -moz-border-radius: 0.5em;
+    -webkit-transition: -webkit-box-shadow 0.15s ease-in;
+    -moz-transition: -moz-box-shadow 0.15s ease-in;
+    -o-transition: -o-box-shadow 0.15s ease-in;
+    transition: box-shadow 0.15s ease-in;
+    transition:0.345s;
+    background-color: lightgrey;
+    opacity: 0.8;
+    padding: 2px 2px 2px 2px;
+    cursor: default;
+}
+
+.path-detail {
+    position: absolute;
+    width: auto;
+    height: auto;
+    left: 2%;
+    top: 2%;
+    z-index: 3;
+    background-color: lightgrey;
+    border: 1px solid black;
+    border-radius: 1em;
+    opacity: 0.8;
+    padding: 0.5%;
+}
+
+.path-begin, .path-end {
+    font-weight: bolder;
+}
+
+.path-title {
+    display: inline-block;
 }

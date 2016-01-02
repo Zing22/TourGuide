@@ -1,5 +1,20 @@
 var MAXCOST = 0xFEFEFE,
-    mat=[
+    FootCost=[
+        [0,1,2,3,4,5,6,7,8,9,10,11,12],
+        [1,MAXCOST,430,570,MAXCOST,MAXCOST,1300,MAXCOST,MAXCOST,MAXCOST,MAXCOST,MAXCOST,MAXCOST],
+        [2,430,MAXCOST,830,670,MAXCOST,MAXCOST,MAXCOST,MAXCOST,MAXCOST,MAXCOST,MAXCOST,MAXCOST],
+        [3,570,830,MAXCOST,1000,MAXCOST,MAXCOST,MAXCOST,MAXCOST,MAXCOST,2500,MAXCOST,MAXCOST],
+        [4,MAXCOST,670,1000,MAXCOST,1300,1300,MAXCOST,MAXCOST,MAXCOST,MAXCOST,MAXCOST,MAXCOST],
+        [5,MAXCOST,MAXCOST,MAXCOST,1300,MAXCOST,MAXCOST,MAXCOST,1600,1000,970,2100,MAXCOST],
+        [6,1300,MAXCOST,MAXCOST,1300,MAXCOST,MAXCOST,1400,MAXCOST,MAXCOST,MAXCOST,MAXCOST,MAXCOST],
+        [7,MAXCOST,MAXCOST,MAXCOST,MAXCOST,MAXCOST,1400,MAXCOST,570,MAXCOST,MAXCOST,MAXCOST,MAXCOST],
+        [8,MAXCOST,MAXCOST,MAXCOST,MAXCOST,1600,MAXCOST,570,MAXCOST,1100,MAXCOST,MAXCOST,MAXCOST],
+        [9,MAXCOST,MAXCOST,MAXCOST,MAXCOST,1000,MAXCOST,MAXCOST,1100,MAXCOST,MAXCOST,2300,3200],
+        [10,MAXCOST,MAXCOST,MAXCOST,2500,970,MAXCOST,MAXCOST,MAXCOST,MAXCOST,MAXCOST,1500,MAXCOST],
+        [11,MAXCOST,MAXCOST,MAXCOST,MAXCOST,2100,MAXCOST,MAXCOST,MAXCOST,2300,1500,MAXCOST,1900],
+        [12,MAXCOST,MAXCOST,MAXCOST,MAXCOST,MAXCOST,MAXCOST,MAXCOST,MAXCOST,3200,MAXCOST,1900,MAXCOST],
+    ],
+    DriveCost=[
         [0,1,2,3,4,5,6,7,8,9,10,11,12],
         [1,MAXCOST,430,570,MAXCOST,MAXCOST,1300,MAXCOST,MAXCOST,MAXCOST,MAXCOST,MAXCOST,MAXCOST],
         [2,430,MAXCOST,830,670,MAXCOST,MAXCOST,MAXCOST,MAXCOST,MAXCOST,MAXCOST,MAXCOST,MAXCOST],
@@ -15,7 +30,26 @@ var MAXCOST = 0xFEFEFE,
         [12,MAXCOST,MAXCOST,MAXCOST,MAXCOST,MAXCOST,MAXCOST,MAXCOST,MAXCOST,3200,MAXCOST,1900,MAXCOST],
     ];
 
-var PointNum = [1,2,3,4,5,6,7,8,9,10,11,12];
+var PointNum = [1,2,3,4,5,6,7,8,9,10,11,12],
+    FootSpeed = 3,
+    DirveSpeed = 20,
+    transportType = "Foot"; // "Drive"
+
+var getCost = function(el1, el2) {
+    if (transportType==="Foot") {
+        return FootCost[el1][el2];
+    } else {
+        return DriveCost[el1][el2];
+    }
+}
+
+var getCostTime = function(len) {
+    if (transportType==="Foot") {
+        return len/FootSpeed;
+    } else {
+        return len/DirveSpeed;
+    }
+}
 
 var dijkstra = function(begin, end) {
     begin = Number(begin.substring(1));
@@ -25,7 +59,7 @@ var dijkstra = function(begin, end) {
         visited = [];
     // init
     $(PointNum).each(function(n, val) {
-        dist[val] = mat[begin][val];
+        dist[val] = getCost(begin, val);
         visited[val] = false;
         if (dist[val]!=MAXCOST) {
             path[val] = begin;
@@ -47,9 +81,9 @@ var dijkstra = function(begin, end) {
         });
         visited[minn] = true;
         $(PointNum).each(function(n, val) {
-            if (!(visited[val]) && mat[minn][val] < MAXCOST) {
-                if (dist[minn] + mat[minn][val] < dist[val]) {
-                    dist[val] = dist[minn] + mat[minn][val];
+            if (!(visited[val]) && getCost(minn, val) < MAXCOST) {
+                if (dist[minn] + getCost(minn, val) < dist[val]) {
+                    dist[val] = dist[minn] + getCost(minn, val);
                     path[val] = minn;
                 }
             }
@@ -68,7 +102,7 @@ var getPath = function(begin, end) {
         now = end;
     while(now != begin) {
         path.push(rawPath[now]);
-        total += mat[rawPath[now]][now];
+        total += getCost(rawPath[now],now);
         now = rawPath[now];
     }
     path.reverse();
