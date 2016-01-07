@@ -175,7 +175,7 @@ jsPlumb.ready(function(){
     var lightPath = function ltp(path, begin, end, light) {
         var newBegin = $(".begin").attr("id"),
             newEnd = $(".end").attr("id");
-        console.log(light+", "+g_light);
+        // console.log(light+", "+g_light);
         if (light===g_light) {
             var items = [];
             for (var i = 0; i < path.length; i++) {
